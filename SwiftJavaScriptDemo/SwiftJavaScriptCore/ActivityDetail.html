@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>测试HTML</title>
+	
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">  
+	<meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+	
+	<style>
+		.button {
+			line-height: 45px;
+    		margin: 10px auto;
+    		color: #fff;
+    		background: #8bc53f;
+    		border-radius: 5px;
+		    text-align: center;
+		   	font-size: 20px;
+		}
+	</style>
+	
+</head>
+	
+<body>
+	
+	<div class="button" onclick="btn()">
+        Javascript调用App的方法showTips()
+    </div>
+
+    <script type="text/javascript">
+        
+		function btn(){
+			WebViewJavascriptBridge.showTips("hello,maizhichao");
+		}
+    
+    </script>
+	
+</body>
+	
+</html>
