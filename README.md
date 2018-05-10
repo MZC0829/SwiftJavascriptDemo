@@ -1,4 +1,7 @@
 # SwiftJavascriptDemo
+## Swift 与 JS 交互
+
+![demo.png](https://upload-images.jianshu.io/upload_images/4886396-b40e4f41d1bfb6a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/200)
 
 ### 1、Swift代码
 ##### ViewController.swift
@@ -30,6 +33,8 @@ class ViewController: UIViewController
     
     var webView: UIWebView!
     
+    var button: UIButton!
+    
     var jsContext: JSContext!
     
     override func viewDidLoad()
@@ -37,16 +42,18 @@ class ViewController: UIViewController
         super.viewDidLoad()
 
         addWebView()
+        
+        addButton()
     }
 
     func addWebView()
     {
-        webView = UIWebView(frame: self.view.bounds)
+        webView = UIWebView(frame: CGRect(x: 0, y: 20, width: view.bounds.width, height: 300))
         view.addSubview(webView)
         webView.delegate = self
         webView.scalesPageToFit = true
         
-        // 加载线上 html 文件
+//        // 加载线上 html 文件
 //        let url = URL(string: urlString)
 //        let request = URLRequest(url: url!)
         
@@ -54,9 +61,22 @@ class ViewController: UIViewController
         let path = Bundle.main.path(forResource: "ActivityDetail", ofType: "html")
         let url = URL(string: path!)
         let request = URLRequest(url: url!)
-        
-        
+       
         webView.loadRequest(request)
+    }
+    
+    func addButton()
+    {
+        button = UIButton(frame: CGRect(x: 20, y: view.bounds.height - 100, width: view.bounds.width - 40, height: 45))
+        button.backgroundColor = UIColor.orange
+        button.setTitle("原生Button调用JS方法", for: .normal)
+        button.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        view.addSubview(button)
+    }
+    
+    @objc func buttonTap()
+    {
+        self.webView.stringByEvaluatingJavaScript(from: "jsAction()")
     }
 
     override func didReceiveMemoryWarning()
@@ -80,53 +100,64 @@ extension ViewController: UIWebViewDelegate
     }
 }
 ```
-
 ### 2、HTML代码
 ##### ActivityDetail.html
 ```
 <!DOCTYPE html>
 <html>
-<head>
-	
-	<title>测试HTML</title>
-	
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">  
-	<meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width,initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
-	
-	<style>
-		.button {
-			line-height: 45px;
-    		margin: 10px auto;
-    		color: #fff;
-    		background: #8bc53f;
-    		border-radius: 5px;
-		    text-align: center;
-		   	font-size: 20px;
-		}
-	</style>
-	
-</head>
-	
-<body>
-	
-	<div class="button" onclick="btn()">
-        Javascript调用App的方法showTips()
-    </div>
-
-    <script type="text/javascript">
+    <head>
         
-		function btn(){
-			WebViewJavascriptBridge.showTips("hello,maizhichao");
-		}
+        <title>测试HTML</title>
+        
+        <meta http-equiv="pragma" content="no-cache">
+            <meta http-equiv="cache-control" content="no-cache">
+                <meta http-equiv="expires" content="0">
+                    <meta charset="UTF-8">
+                        <meta name="viewport"
+                            content="width=device-width,initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+                            
+                            <style>
+                                .button {
+                                    line-height: 45px;
+                                    margin: 10px auto;
+                                    color: #fff;
+                                    background: #8bc53f;
+                                    border-radius: 5px;
+                                    text-align: center;
+                                    font-size: 20px;
+                                }
+                            p{
+                                text-align: center;
+                                font-size: 20px;
+                                color: #000000;
+                            }
+                            </style>
+                            
+                            </head>
     
-    </script>
-	
-</body>
-	
+    <body>
+        
+        <p>窗前明月光，恭喜恭喜！
+        </p>
+        
+        <div class="button" onclick="btn()">
+            JS调用原生的方法 showTips()
+        </div>
+        
+        <script type="text/javascript">
+            
+            function btn(){
+                WebViewJavascriptBridge.showTips("hello,maizhichao");
+            }
+        
+        function jsAction(){
+            alert("我是JS里的方法");
+        }
+        
+            </script>
+        
+    </body>
+    
 </html>
 ```
 >参考自：https://github.com/YanlongMa/SwiftJavaScriptCore
