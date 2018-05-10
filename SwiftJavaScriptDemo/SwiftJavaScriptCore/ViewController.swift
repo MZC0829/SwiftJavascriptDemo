@@ -27,6 +27,8 @@ class ViewController: UIViewController
     
     var webView: UIWebView!
     
+    var button: UIButton!
+    
     var jsContext: JSContext!
     
     override func viewDidLoad()
@@ -34,16 +36,18 @@ class ViewController: UIViewController
         super.viewDidLoad()
 
         addWebView()
+        
+        addButton()
     }
 
     func addWebView()
     {
-        webView = UIWebView(frame: self.view.bounds)
+        webView = UIWebView(frame: CGRect(x: 0, y: 20, width: view.bounds.width, height: 300))
         view.addSubview(webView)
         webView.delegate = self
         webView.scalesPageToFit = true
         
-        // 加载线上 html 文件
+//        // 加载线上 html 文件
 //        let url = URL(string: urlString)
 //        let request = URLRequest(url: url!)
         
@@ -54,6 +58,20 @@ class ViewController: UIViewController
         
         
         webView.loadRequest(request)
+    }
+    
+    func addButton()
+    {
+        button = UIButton(frame: CGRect(x: 20, y: view.bounds.height - 100, width: view.bounds.width - 40, height: 45))
+        button.backgroundColor = UIColor.orange
+        button.setTitle("原生Button调用JS方法", for: .normal)
+        button.addTarget(self, action: #selector(buttonTap), for: .touchUpInside)
+        view.addSubview(button)
+    }
+    
+    @objc func buttonTap()
+    {
+        self.webView.stringByEvaluatingJavaScript(from: "jsAction()")
     }
 
     override func didReceiveMemoryWarning()
